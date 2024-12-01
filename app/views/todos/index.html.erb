@@ -1,0 +1,18 @@
+<h1>To-Do List</h1>
+
+<%= link_to "New Todo", new_todo_path %>
+
+<ul>
+  <% @todos.each do |todo| %>
+    <li>
+      <%= todo.title %> - <%= todo.completed ? "Completed" : "Pending" %>
+      
+      <%= link_to "Show", todo_path(todo) %> | 
+      <%= link_to "Edit", edit_todo_path(todo) %> | 
+      
+      <%= form_with(url: todo_path(todo), method: :delete, data: { confirm: "Are you sure?" }, local: true) do %>
+        <%= submit_tag "Delete", style: "background:none; border:none; color:blue; cursor:pointer;" %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>

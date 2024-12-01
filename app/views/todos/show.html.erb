@@ -1,0 +1,8 @@
+<h1>Todo Details</h1>
+
+<p><strong>Title:</strong> <%= @todo.title %></p>
+<p><strong>Status:</strong> <%= @todo.completed ? "Completed" : "Pending" %></p>
+
+<%= link_to "Back to List", todos_path %> |
+<%= link_to "Edit", edit_todo_path(@todo) %> |
+<%= link_to "Delete", todo_path(@todo), method: :delete, data: { confirm: "Are you sure?" } %>
