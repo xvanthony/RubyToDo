@@ -51,3 +51,5 @@ end
 
 
 gem "webpacker", "~> 5.4"
+
+gem "importmap-rails", "~> 2.0"
