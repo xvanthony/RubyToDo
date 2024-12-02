@@ -2,11 +2,21 @@ class TodosController < ApplicationController
   before_action :set_todo, only: %i[show edit update destroy]
 
   def index
-    @todos = Todo.all
+    @todos = Todo.all # Default: Show all todos
+    
+    # If a tag is provided, filter todos by the selected tag
+    if params[:tag]
+      @todos = @todos.joins(:tags).where(tags: { name: params[:tag] })
+    end
+  
+    # Get all tags for filtering
+    @tags = Tag.all
   end
+  
+  
+  
 
   def show
-    # @todo is already set by before_action
   end
 
   def new
@@ -16,6 +26,7 @@ class TodosController < ApplicationController
   def create
     @todo = Todo.new(todo_params)
     if @todo.save
+      update_tags(@todo)
       redirect_to todos_path
     else
       render :new
@@ -27,6 +38,7 @@ class TodosController < ApplicationController
 
   def update
     if @todo.update(todo_params)
+      update_tags(@todo)
       redirect_to todos_path
     else
       render :edit
@@ -35,10 +47,8 @@ class TodosController < ApplicationController
 
   def destroy
     @todo.destroy
-    redirect_to todos_path, notice: 'Todo was successfully deleted.'
+    redirect_to todos_path
   end
-  
-  
 
   private
 
@@ -47,6 +57,15 @@ class TodosController < ApplicationController
   end
 
   def todo_params
-    params.require(:todo).permit(:title, :completed)
+    params.require(:todo).permit(:title, :completed)  # Remove :tag_list here
   end
+
+  def update_tags(todo)
+    tag_names = params[:todo][:tag_list].split(",").map(&:strip).uniq
+    tags = tag_names.map { |name| Tag.find_or_create_by(name: name) }
+  
+    todo.tags = tags
+  end
+  
+  
 end

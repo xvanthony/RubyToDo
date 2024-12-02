@@ -2,20 +2,26 @@
 
 <%= link_to "New Todo", new_todo_path %>
 
+<h2>Filter by Tag:</h2>
+<div class="tags">
+  <ul>
+    <% @tags.each do |tag| %>
+      <li><%= link_to tag.name, todos_path(tag: tag.name) %></li>
+    <% end %>
+  </ul>
+</div>
+
 <ul>
   <% @todos.each do |todo| %>
     <li>
-      <%= todo.title %> - <%= todo.completed ? "Completed" : "Pending" %>
-      
-      <%= link_to "Show", todo_path(todo) %> | 
-      <%= link_to "Edit", edit_todo_path(todo) %> | 
-      
+      <%= todo.title %> - <%= todo.completed ? "Completed" : "Pending" %> |
+      <% if todo.tags.any? %>
+        Tags: <%= todo.tags.map(&:name).join(", ") %>
+      <% end %>
+      <%= link_to "Edit", edit_todo_path(todo) %> |
       <%= form_with(url: todo_path(todo), method: :delete, data: { confirm: "Are you sure?" }, local: true) do %>
         <%= submit_tag "Delete", style: "background:none; border:none; color:blue; cursor:pointer;" %>
       <% end %>
     </li>
-  <% end %>
-</ul>
-
-<ul>
+  <% end %>  <!-- Close the @todos.each loop -->
 </ul>

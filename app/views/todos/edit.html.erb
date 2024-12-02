@@ -1,8 +1,8 @@
 <h1>Edit To-Do</h1>
 
-<%= form_with model: @todo, local: true do |form| %>
+<%= form_with(model: @todo, local: true) do |form| %>
   <% if @todo.errors.any? %>
-    <div class="errors">
+    <div id="error_explanation">
       <h2><%= pluralize(@todo.errors.count, "error") %> prohibited this todo from being saved:</h2>
       <ul>
         <% @todo.errors.full_messages.each do |message| %>
@@ -12,19 +12,22 @@
     </div>
   <% end %>
 
-  <div>
+  <div class="field">
     <%= form.label :title %>
     <%= form.text_field :title %>
   </div>
 
-  <div>
+  <div class="field">
     <%= form.label :completed %>
     <%= form.check_box :completed %>
   </div>
 
-  <div>
-    <%= form.submit "Update To-Do" %>
+  <div class="field">
+    <%= form.label :tag_list, "Tags (comma-separated)" %>
+    <%= form.text_field :tag_list, value: @todo.tags.map(&:name).join(", ") %>  <!-- Pre-fill with existing tags -->
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
   </div>
 <% end %>
-
-<%= link_to 'Back', todos_path %>
