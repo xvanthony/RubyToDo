@@ -4,13 +4,16 @@ class TodosController < ApplicationController
   def index
     @todos = Todo.all
 
-    # Filtering
     if params[:tag]
       @todos = @todos.joins(:tags).where(tags: { name: params[:tag] })
     end
 
     # Custom priority sorting logic
-    @todos = @todos.sort_by_priority
+    priority_logic = ->(todo) { todo.completed ? 0 : todo.urgency_score }
+
+    @todos = @todos.to_a.sort_by { |todo| -priority_logic.call(todo) }
+
+
     # Get all tags for filtering
     @tags = Tag.all
   end
