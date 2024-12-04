@@ -10,9 +10,7 @@ class TodosController < ApplicationController
     end
 
     # Custom priority sorting logic
-    custom_logic = ->(todo) { todo.completed ? 0 : todo.urgency_score }
-    @todos = @todos.to_a.sort_by { |todo| custom_logic.call(todo) }
-
+    @todos = @todos.sort_by_priority
     # Get all tags for filtering
     @tags = Tag.all
   end

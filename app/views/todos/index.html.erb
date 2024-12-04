@@ -1,26 +1,39 @@
-<h1>To-Do List</h1>
+<h1 class="text-center mb-4">Your To-Do List</h1>
 
-<%= link_to "New Todo", new_todo_path %>
-
+<!-- Filter by Tags -->
 <h2>Filter by Tag:</h2>
-<div class="tags">
-  <ul>
+<div class="tags mb-4">
+  <ul class="list-inline">
     <% @tags.each do |tag| %>
-      <li><%= link_to tag.name, todos_path(tag: tag.name) %></li>
+      <li class="list-inline-item">
+        <%= link_to tag.name, todos_path(tag: tag.name), class: "badge bg-primary text-decoration-none" %>
+      </li>
     <% end %>
   </ul>
 </div>
 
-<ul>
+<!-- To-Do Items -->
+<ul class="list-group">
   <% @todos.each do |todo| %>
-    <li>
-    <strong><%= todo.priority || "Unspecified" %></strong> <%= todo.title %> - <%= todo.completed ? "Completed" : "| Not Yet Completed | " %>      <% if todo.tags.any? %>
-        Tags: <%= todo.tags.map(&:name).join(", ") %>
-      <% end %>
-      <%= link_to "Edit", edit_todo_path(todo) %> |
-      <%= form_with(url: todo_path(todo), method: :delete, data: { confirm: "Are you sure?" }, local: true) do %>
-        <%= submit_tag "Delete", style: "background:none; border:none; color:blue; cursor:pointer;" %>
-      <% end %>  
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <div>
+        <strong class="<%= todo.priority.downcase if todo.priority %>">
+          <%= todo.priority || "Unspecified" %>
+        </strong>
+        <%= todo.title %> 
+        <span class="badge <%= todo.completed ? 'bg-success' : 'bg-warning text-dark' %>">
+          <%= todo.completed ? "Completed" : "Not Yet Completed" %>
+        </span>
+        <% if todo.tags.any? %>
+          <small class="text-muted">Tags: <%= todo.tags.map(&:name).join(", ") %></small>
+        <% end %>
+      </div>
+      <div>
+        <%= link_to "Edit", edit_todo_path(todo), class: "btn btn-sm btn-outline-primary me-2" %>
+        <%= form_with(url: todo_path(todo), method: :delete, data: { confirm: "Are you sure?" }, local: true) do %>
+          <%= submit_tag "Delete", class: "btn btn-sm btn-outline-danger" %>
+        <% end %>
+      </div>
     </li>
-  <% end %>  
+  <% end %>
 </ul>

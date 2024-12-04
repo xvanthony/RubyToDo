@@ -20,6 +20,9 @@ module PrioritySortable
     end
 
     module ClassMethods
+      def sort_by_custom_logic(&block)
+        all.sort_by(&block)
+      end
       def sort_by_priority(custom_logic = nil)
         all.sort_by do |todo|
           custom_logic ? custom_logic.call(todo) : -todo.urgency_score

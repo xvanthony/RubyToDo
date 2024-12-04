@@ -5,6 +5,7 @@ class Todo < ApplicationRecord
 
   validates :priority, inclusion: { in: ["High", "Medium", "Low"], allow_nil: false }
 
+  include Filterable
   before_save :normalize_priority
 
   private
