@@ -14,14 +14,13 @@
 <ul>
   <% @todos.each do |todo| %>
     <li>
-      <%= todo.title %> - <%= todo.completed ? "Completed" : "Pending" %> |
-      <% if todo.tags.any? %>
+    <strong><%= todo.priority.capitalize %></strong> <%= todo.title %> - <%= todo.completed ? "Completed" : "Pending" %>      <% if todo.tags.any? %>
         Tags: <%= todo.tags.map(&:name).join(", ") %>
       <% end %>
       <%= link_to "Edit", edit_todo_path(todo) %> |
       <%= form_with(url: todo_path(todo), method: :delete, data: { confirm: "Are you sure?" }, local: true) do %>
         <%= submit_tag "Delete", style: "background:none; border:none; color:blue; cursor:pointer;" %>
-      <% end %>
+      <% end %>  <!-- Close the form_with block here -->
     </li>
   <% end %>  <!-- Close the @todos.each loop -->
 </ul>

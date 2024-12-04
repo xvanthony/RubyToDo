@@ -3,19 +3,21 @@ class TodosController < ApplicationController
 
   def index
     @todos = Todo.all # Default: Show all todos
-    
+  
     # If a tag is provided, filter todos by the selected tag
     if params[:tag]
       @todos = @todos.joins(:tags).where(tags: { name: params[:tag] })
     end
+  
+    # Custom priority sorting logic
+    custom_logic = ->(todo) { todo.completed ? 0 : todo.urgency_score }
+    @todos = @todos.to_a.sort_by { |todo| custom_logic.call(todo) } # Convert to array for custom sorting
   
     # Get all tags for filtering
     @tags = Tag.all
   end
   
   
-  
-
   def show
   end
 
@@ -57,8 +59,9 @@ class TodosController < ApplicationController
   end
 
   def todo_params
-    params.require(:todo).permit(:title, :completed)  # Remove :tag_list here
+    params.require(:todo).permit(:title, :completed, :priority)  # Add :priority here
   end
+  
 
   def update_tags(todo)
     tag_names = params[:todo][:tag_list].split(",").map(&:strip).uniq

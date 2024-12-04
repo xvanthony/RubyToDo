@@ -27,6 +27,13 @@
     <%= form.text_field :tag_list, value: @todo.tags.map(&:name).join(", ") %>  <!-- Pre-fill with existing tags -->
   </div>
 
+  <div class="field">
+  <%= form.label :priority %>
+  <%= form.select :priority, ['High', 'Medium', 'Low'], { include_blank: true } %>
+  </div>
+
+
+
   <div class="actions">
     <%= form.submit %>
   </div>
