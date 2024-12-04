@@ -14,7 +14,7 @@
 <ul>
   <% @todos.each do |todo| %>
     <li>
-    <strong><%= todo.priority.capitalize %></strong> <%= todo.title %> - <%= todo.completed ? "Completed" : "Pending" %>      <% if todo.tags.any? %>
+    <strong><%= todo.priority || "Unspecified" %></strong> <%= todo.title %> - <%= todo.completed ? "Completed" : "Pending" %>      <% if todo.tags.any? %>
         Tags: <%= todo.tags.map(&:name).join(", ") %>
       <% end %>
       <%= link_to "Edit", edit_todo_path(todo) %> |
